@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>My Canva Projects</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    background:#f4f4f4;
+}
+
+header{
+    background:#00c4cc;
+    color:white;
+    padding:25px;
+    text-align:center;
+    font-size:35px;
+    font-weight:bold;
+}
+
+#projects{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:20px;
+    padding:30px;
+}
+
+.card{
+    background:white;
+    width:260px;
+    border-radius:12px;
+    box-shadow:0 5px 15px rgba(0,0,0,.15);
+    padding:20px;
+    text-align:center;
+}
+
+.card h2{
+    margin-top:0;
+}
+
+.card a{
+    display:inline-block;
+    margin-top:15px;
+    background:#00c4cc;
+    color:white;
+    padding:10px 20px;
+    text-decoration:none;
+    border-radius:8px;
+}
+
+.card a:hover{
+    background:#009ea5;
+}
+</style>
+
+</head>
+<body>
+
+<header>🎨 My Canva Projects</header>
+
+<div id="projects"></div>
+
+<script>
+
+let projects=JSON.parse(localStorage.getItem("canvaProjects")) || [];
+
+const container=document.getElementById("projects");
+
+function load(){
+
+container.innerHTML="";
+
+if(projects.length==0){
+container.innerHTML="<h2>No Projects Yet</h2>";
+return;
+}
+
+projects.forEach(p=>{
+
+container.innerHTML+=`
+<div class="card">
+<h2>${p.name}</h2>
+<a href="${p.link}" target="_blank">Open Project</a>
+</div>
+`;
+
+});
+
+}
+
+load();
+
+</script>
+
+</body>
+</html>
