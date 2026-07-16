@@ -1,99 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>My Canva Projects</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Canva Projects</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
 
-<style>
-body{
-    margin:0;
-    font-family:Arial;
-    background:#f4f4f4;
-}
+    body {
+      background: linear-gradient(135deg, #00c4cc, #7b61ff);
+      min-height: 100vh;
+      padding: 20px;
+    }
 
-header{
-    background:#00c4cc;
-    color:white;
-    padding:25px;
-    text-align:center;
-    font-size:35px;
-    font-weight:bold;
-}
+    header {
+      text-align: center;
+      color: white;
+      margin-bottom: 30px;
+    }
 
-#projects{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:20px;
-    padding:30px;
-}
+    header h1 {
+      font-size: 42px;
+      margin-bottom: 10px;
+    }
 
-.card{
-    background:white;
-    width:260px;
-    border-radius:12px;
-    box-shadow:0 5px 15px rgba(0,0,0,.15);
-    padding:20px;
-    text-align:center;
-}
+    header p {
+      font-size: 18px;
+      opacity: 0.9;
+    }
 
-.card h2{
-    margin-top:0;
-}
+    .search-box {
+      max-width: 500px;
+      margin: 0 auto 30px;
+    }
 
-.card a{
-    display:inline-block;
-    margin-top:15px;
-    background:#00c4cc;
-    color:white;
-    padding:10px 20px;
-    text-decoration:none;
-    border-radius:8px;
-}
+    .search-box input {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      outline: none;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    }
 
-.card a:hover{
-    background:#009ea5;
-}
-</style>
+    .projects {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 25px;
+      max-width: 1200px;
+      margin: auto;
+    }
 
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 25px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+    }
+
+    .icon {
+      font-size: 50px;
+      margin-bottom: 15px;
+    }
+
+    .card h2 {
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .card p {
+      color: #666;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .card a {
+      display: inline-block;
+      text-decoration: none;
+      background: #00c4cc;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-weight: bold;
+      transition: background 0.2s ease;
+    }
+
+    .card a:hover {
+      background: #00a7ad;
+    }
+
+    .no-results {
+      text-align: center;
+      color: white;
+      font-size: 20px;
+      margin-top: 20px;
+      display: none;
+    }
+  </style>
 </head>
 <body>
 
-<header>🎨 My Canva Projects</header>
+  <header>
+    <h1>🎨 My Canva Projects</h1>
+    <p>Click any project to open it in Canva</p>
+  </header>
 
-<div id="projects"></div>
+  <div class="search-box">
+    <input type="text" id="search" placeholder="Search projects..." oninput="displayProjects()">
+  </div>
 
-<script>
+  <div class="projects" id="projects"></div>
+  <div class="no-results" id="noResults">No projects found.</div>
 
-let projects=JSON.parse(localStorage.getItem("canvaProjects")) || [];
+  <script>
+    const projects = [
+      {
+        name: "Game Poster",
+        description: "A poster I made for my game.",
+        link: "https://www.canva.com/design/YOUR_LINK_HERE",
+        icon: "🎮"
+      },
+      {
+        name: "Science Presentation",
+        description: "My school science slides.",
+        link: "https://www.canva.com/design/YOUR_LINK_HERE",
+        icon: "🔬"
+      },
+      {
+        name: "Math Project",
+        description: "A math project design.",
+        link: "https://www.canva.com/design/YOUR_LINK_HERE",
+        icon: "📚"
+      }
+    ];
 
-const container=document.getElementById("projects");
+    function displayProjects() {
+      const container = document.getElementById("projects");
+      const search = document.getElementById("search").value.toLowerCase();
+      const noResults = document.getElementById("noResults");
 
-function load(){
+      container.innerHTML = "";
 
-container.innerHTML="";
+      const filtered = projects.filter(project =>
+        project.name.toLowerCase().includes(search) ||
+        project.description.toLowerCase().includes(search)
+      );
 
-if(projects.length==0){
-container.innerHTML="<h2>No Projects Yet</h2>";
-return;
-}
+      if (filtered.length === 0) {
+        noResults.style.display = "block";
+        return;
+      }
 
-projects.forEach(p=>{
+      noResults.style.display = "none";
 
-container.innerHTML+=`
-<div class="card">
-<h2>${p.name}</h2>
-<a href="${p.link}" target="_blank">Open Project</a>
-</div>
-`;
+      filtered.forEach(project => {
+        container.innerHTML += `
+          <div class="card">
+            <div class="icon">${project.icon}</div>
+            <h2>${project.name}</h2>
+            <p>${project.description}</p>
+            <a href="${project.link}" target="_blank">Open Project</a>
+          </div>
+        `;
+      });
+    }
 
-});
-
-}
-
-load();
-
-</script>
+    displayProjects();
+  </script>
 
 </body>
 </html>
